@@ -1814,7 +1814,7 @@ $("#authForm").addEventListener("submit",e=>{
 document.querySelectorAll("[data-sso]").forEach(b=>b.addEventListener("click",()=>signIn(null)));
 if(!LOGIN_ENABLED){$("#logout").classList.add("hidden");document.querySelectorAll('[data-auth="login"]').forEach(a=>a.classList.add("hidden"))}
 $("#logout").addEventListener("click",()=>{session=false;try{localStorage.removeItem("ts-session")}catch(e){}showView("accueil");toast("À bientôt !")});
-$(".wordmark").addEventListener("click",e=>{e.preventDefault();showView(session?"publier":"accueil")});
+$(".wordmark").addEventListener("click",e=>{e.preventDefault();showView(LOGIN_ENABLED&&session?"publier":"accueil")}); // sans connexion, le logo ramène à l’accueil
 
 function showView(v){
   if(!LOGIN_ENABLED&&v==="connexion")v="publier";
@@ -1837,7 +1837,7 @@ function showView(v){
   window.scrollTo(0,0);
 }
 document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
-const viewFromHash=()=>({"#stock":"stock","#stats":"stats","#compte":"compte","#publier":"publier","#accueil":"accueil","#connexion":"connexion"})[location.hash]||(session?"publier":"accueil");
+const viewFromHash=()=>({"#stock":"stock","#stats":"stats","#compte":"compte","#publier":"publier","#accueil":"accueil","#connexion":"connexion"})[location.hash]||(LOGIN_ENABLED&&session?"publier":"accueil"); // sans connexion, on arrive sur l’accueil
 document.addEventListener("click",e=>{const a=e.target.closest('a[href="#comment"]');if(a){e.preventDefault();$("#comment").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}});
 window.addEventListener("hashchange",()=>showView(viewFromHash()));
 
