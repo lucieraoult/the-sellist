@@ -1,0 +1,63 @@
+{
+  "manifest_version": 3,
+  "name": "The Sellist",
+  "version": "0.4.0",
+  "description": "Poste une fois, vends partout : remplit tes annonces Vinted et Vestiaire Collective en un clic. Sans mot de passe.",
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://www.vinted.fr/*",
+    "https://www.vinted.co.uk/*",
+    "https://*.vestiairecollective.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://localhost/*",
+        "http://127.0.0.1/*",
+        "https://*.github.io/*",
+        "https://*.netlify.app/*",
+        "https://*.vercel.app/*",
+        "file:///*"
+      ],
+      "js": [
+        "bridge.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://www.vinted.fr/*",
+        "https://www.vinted.co.uk/*",
+        "https://*.vestiairecollective.com/*"
+      ],
+      "js": [
+        "sites.js",
+        "filler.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "The Sellist",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png"
+    }
+  },
+  "short_name": "The Sellist",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

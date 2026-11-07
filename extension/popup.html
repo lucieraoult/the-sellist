@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<style>
+  :root{--lin:#F5F2ED;--encre:#141414;--muted:#5E5A53;--line:#D9D3C9;--vert:#1E5A46;--vert-ink:#F5F2ED}
+  @media (prefers-color-scheme: dark){:root{--lin:#151513;--encre:#F2EEE7;--muted:#A8A196;--line:#34312C;--vert:#6DB397;--vert-ink:#0F1F19}}
+  body{margin:0;width:300px;background:var(--lin);color:var(--encre);font:14px/1.45 system-ui,-apple-system,sans-serif}
+  .w{padding:16px}
+  .h{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .h img{width:32px;height:32px}
+  .h b{font-size:17px}
+  .tag{color:var(--muted);margin:0 0 12px}
+  ol{margin:0 0 14px;padding-left:1.2em;display:grid;gap:4px}
+  a.go{display:block;text-align:center;text-decoration:none;background:var(--vert);color:var(--vert-ink);font-weight:600;border-radius:999px;padding:10px}
+  .f{margin-top:12px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:10px}
+</style></head>
+<body><div class="w">
+  <div class="h"><img src="icons/icon-48.png" alt=""><b>The Sellist</b></div>
+  <p class="tag">Poste une fois, vends partout.</p>
+  <ol>
+    <li>Connecte-toi à Vinted et Vestiaire dans ce navigateur.</li>
+    <li>Sur The Sellist, remplis ta fiche et clique sur <b>Publier</b>.</li>
+    <li>On remplit les annonces : tu vérifies et tu publies.</li>
+  </ol>
+  <a class="go" id="open" href="#" target="_blank" rel="noopener">Ouvrir The Sellist</a>
+  <p class="f">Prototype. Aucun mot de passe demandé, rien ne quitte ton navigateur.</p>
+</div><script src="popup.js"></script></body></html>

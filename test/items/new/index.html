@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Mock Vinted form</title>
+<style>body{font:15px system-ui;max-width:560px;margin:24px auto;padding:0 16px}label{display:block;margin-top:12px;font-weight:600}input,textarea{width:100%;padding:8px;box-sizing:border-box}ul[role=listbox]{border:1px solid #ccc;margin:0;padding:0;list-style:none}li[role=option]{padding:6px;cursor:pointer}</style>
+</head><body>
+<h1>Mock « Vendre un article »</h1>
+<p>Local test page shaped like Vinted's form. It stubs the extension APIs and runs sites.js + filler.js directly.</p>
+<div id="zone" style="border:2px dashed #bbb;border-radius:8px;padding:30px;margin-top:12px;text-align:center">Upload photos<input type="file" accept="image/*" multiple id="photos" style="display:none"><div id="thumbs"></div></div><div id="photoCount">0 photo</div>
+<label for="title">Titre</label><input id="title" data-testid="title--input">
+<label for="description">Décris ton article</label><textarea id="description" rows="4"></textarea>
+<label for="brand">Marque</label><input id="brand" autocomplete="off"><ul role="listbox" id="brandList" hidden></ul>
+<label for="status">État</label><input id="status" readonly><ul role="listbox" id="statusList" hidden></ul>
+<label for="price">Prix</label><input id="price" type="text">
+<script>
+// fake dropdowns
+function combo(inputId, listId, values, typeahead) {
+  const i = document.getElementById(inputId), l = document.getElementById(listId);
+  const show = (q) => { l.innerHTML = values.filter(v => !q || v.toLowerCase().includes(q.toLowerCase())).map(v => `<li role="option">${v}</li>`).join(""); l.hidden = false; };
+  i.addEventListener("click", () => show(""));
+  if (typeahead) i.addEventListener("input", () => show(i.value));
+  l.addEventListener("click", (e) => { const o = e.target.closest("li"); if (o) { i.dataset.chosen = o.textContent; i.value = o.textContent; l.hidden = true; } });
+}
+// ?en → behave like vinted.co.uk (English option labels)
+const MOCK_EN = new URLSearchParams(location.search).has("en");
+if (MOCK_EN) window.SELLIST_FORCE_LANG = "en";
+combo("brand", "brandList", ["Sandro", "Sézane", "Sessun"], true);
+combo("status", "statusList", MOCK_EN ? ["New with tags", "Very good", "Good"] : ["Neuf avec étiquette", "Très bon état", "Bon état"], false);
+// ?drop → the input ignores change events and only drag-and-drop works (tests the fallback)
+const MOCK_DROP = new URLSearchParams(location.search).has("drop");
+let added = 0;
+function addThumbs(files) { for (const f of files) { const im = document.createElement("img"); im.src = URL.createObjectURL(f); im.width = 40; document.getElementById("thumbs").appendChild(im); added++; } document.getElementById("photoCount").textContent = added + " photo(s)"; }
+document.getElementById("photos").addEventListener("change", (e) => { if (!MOCK_DROP) addThumbs(e.target.files); });
+const zone = document.getElementById("zone");
+zone.addEventListener("dragover", (e) => e.preventDefault());
+zone.addEventListener("drop", (e) => { e.preventDefault(); addThumbs(e.dataTransfer.files); });
+
+// stub the extension runtime
+const c = document.createElement("canvas"); c.width = c.height = 40; c.getContext("2d").fillRect(0, 0, 40, 40);
+const JOB = { site: "vinted", photos: [c.toDataURL("image/jpeg"), c.toDataURL("image/jpeg")], listing: {
+  titre: "Sézane Veste en jean oversize", description: "Veste en jean Sézane, très bon état.", prix: 45,
+  fields: [{ label: "Catégorie", value: "Vestes femme" }, { label: "Marque", value: "Sézane" }, { label: "Taille", value: "M" },
+           { label: "État", value: "Très bon état" }, { label: "Couleur", value: "Bleu" }, { label: "Prix", value: "45" }] } };
+window.chrome = { runtime: { sendMessage: (m, cb) => setTimeout(() => cb(m.type === "GET_JOB" ? JOB : true), 10) } };
+window.SELLIST_FORCE_SITE = "vinted";
+</script>
+<script src="/extension/sites.js"></script>
+<script src="/extension/filler.js"></script>
+</body></html>
