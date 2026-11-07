@@ -1812,7 +1812,12 @@ $("#authForm").addEventListener("submit",e=>{
   signIn(authMode==="signup"?pr:null);
 });
 document.querySelectorAll("[data-sso]").forEach(b=>b.addEventListener("click",()=>signIn(null)));
-if(!LOGIN_ENABLED){$("#logout").classList.add("hidden");document.querySelectorAll('[data-auth="login"]').forEach(a=>a.classList.add("hidden"))}
+if(!LOGIN_ENABLED){$("#logout").classList.add("hidden");document.querySelectorAll('[data-auth="login"]').forEach(a=>a.classList.add("hidden"));
+  const fin=document.querySelector(".final [data-auth]");if(fin)fin.textContent="Publier mon premier article"}
+/* Prototype non commercial : on cache la section Tarifs de l’accueil.
+   Le code est conservé ; repasse SHOW_PRICING à true pour la réafficher. */
+const SHOW_PRICING=false;
+if(!SHOW_PRICING)$("#tarifs").classList.add("hidden");
 $("#logout").addEventListener("click",()=>{session=false;try{localStorage.removeItem("ts-session")}catch(e){}showView("accueil");toast("À bientôt !")});
 $(".wordmark").addEventListener("click",e=>{e.preventDefault();showView(LOGIN_ENABLED&&session?"publier":"accueil")}); // sans connexion, le logo ramène à l’accueil
 
