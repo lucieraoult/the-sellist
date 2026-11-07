@@ -41,6 +41,14 @@ localStorage keys in use: `ts-items`, `ts-settings`, `ts-markups`, `ts-session`,
 ## Chrome extension (extension/)
 MV3 extension that autofills Vinted and Vestiaire listing forms from step 4 ("Remplir Vinted + Vestiaire" bar, `renderXpost()` in index.html). The page talks to `extension/bridge.js` through `window.postMessage` (`source: "sellist-page"` / `"sellist-ext"`). No backend, no storage outside the browser, and the extension never clicks Publish. Field matchers live in `extension/sites.js`. They are unverified against the live forms because vinted.fr and vestiairecollective.com are blocked in Claude's browser pane, so test in real Chrome. A mock form lives at `test/items/new/`. See `extension/README.md`.
 
+## Hosting and sharing
+- Live site: https://lucieraoult.github.io/the-sellist/ (GitHub Pages from `main`, repo github.com/lucieraoult/the-sellist, public). Pushing to `main` redeploys in about a minute. Push over HTTPS (SSH push isn't set up on this machine).
+- Friends install the extension from `the-sellist-extension.zip` (linked in the install guide at the top of Publier, shown only while the extension isn't detected). Run `./build-extension.sh` after any change in `extension/`, then commit the zip.
+- Prototype switches in index.html: `LOGIN_ENABLED`, `PSEUDO_REQUIRED`, `PROTOTYPE_SITES`, `SIMPLE_MODE`. The original code is kept behind each one.
+
+## Extension branding
+Name and description: `extension/manifest.json` (`name`, `description`, max 132 chars). Popup text: `extension/popup.html`; its button URL: `extension/popup.js`. Logo: `extension/icons/icon.svg`. The PNGs were rendered from it in a browser canvas because ImageMagick drops the strokes, so re-render them the same way after changing the SVG.
+
 ## Conventions
 - Keep UI copy in French, informal "tu".
 - Design tokens are CSS variables on `:root` (lin, encre, galet, vert) with a dark theme; keep both themes working and keep mobile layouts at 16px gutters.
